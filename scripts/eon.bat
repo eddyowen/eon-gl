@@ -30,19 +30,24 @@ goto :eof
 
 :: Warning message thrown due an empty command
 :emptyCommand
-echo %ESC%[33mNo command was entered. Type eon --help for help. %ESC%[0m
+echo %ESC%[33mNo command was entered. Type "eon --help" for help. %ESC%[0m
 goto :eof
 
 :: Error message thrown due an unrecognized command
 :notRecognizedCommand
-echo %ESC%[31m[ERROR]: Not such an EON command. Type --help for help. %ESC%[0m
+echo %ESC%[31m[ERROR]: Not such an EON command. Type "eon --help" for help. %ESC%[0m
 goto :eof
 
 :: Generates the solution files
 :gensln
+
 pushd ..\
-echo.
 call vendor\premake\premake5.exe vs2019
+if %ERRORLEVEL% == 0 goto:successBuild
+echo %ESC%[31m[ERROR] Errors encountered while generating the solution. Check the error list above.%ESC%[0m
+goto :eof
+
+:successBuild
 echo %ESC%[32m[SUCCESS]: Solution successfully generated! %ESC%[0m
 popd
 goto :eof
@@ -50,8 +55,13 @@ goto :eof
 :: Opens your solution
 :opensln
 pushd ..\
-start generated\OpenGL-Course.sln
+if exist eon-gl.sln (
+    start eon-gl.sln
+) else (
+    echo %ESC%[31m[ERROR]: Cannot find solution file. Please, execute "eon gensln" to generate project files. %ESC%[0m
+)
 popd
+echo %ESC%[32m[SUCCESS]: Openning the solution! %ESC%[0m
 goto :eof
 
 :: Deteles your build files

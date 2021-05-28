@@ -8,11 +8,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 includeDir = {}
 includeDir["GLFW"] = "vendor/GLFW/include"
-includeDir["GLEW"] = "vendor/GLEW/include"
+includeDir["GLAD"] = "vendor/GLAD/include"
 includeDir["spdlog"] = "vendor/spdlog/include"
 
 include "vendor/GLFW"
-include "vendor/GLEW"
+include "vendor/GLAD"
 
 project "eon-gl"
     kind "ConsoleApp"
@@ -31,22 +31,21 @@ project "eon-gl"
 
     defines
     {
-        "_CRT_SECURE_NO_WARNINGS",
-        "GLEW_STATIC"
+        "_CRT_SECURE_NO_WARNINGS"
     }
 
     includedirs
     {
         "src",
         "%{includeDir.GLFW}",
-        "%{includeDir.GLEW}",
+        "%{includeDir.GLAD}",
         "%{includeDir.spdlog}"
     }
 
     links 
     { 
         "GLFW",
-        "GLEW",
+        "GLAD",
         "opengl32.lib"
     }
 
